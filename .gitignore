@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# Logs & Environment
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+.env*.local
+
+# CCTV Recordings & Snapshots
+recordings/
+ai/recordings/
+ai/snapshots/
+ai/data/*.db
+
+# OS / Editor
+.DS_Store
+*.pem
