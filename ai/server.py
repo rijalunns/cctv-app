@@ -14,6 +14,11 @@ import glob
 from detector import CCTVDetector, draw_detections, frame_to_base64, save_snapshot, trigger_recording, RTSP_URL, SNAPSHOT_DIR, RECORD_DIR
 
 app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # Max 50MB upload limit to prevent DoS
+
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    return jsonify({'error': 'File too large. Maximum allowed size is 50MB.'}), 413
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 

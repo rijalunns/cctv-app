@@ -17,7 +17,6 @@ streams:
 
 api:
   listen: ":1984"
-  origin: "*"
 
 webrtc:
   listen: ":8555"
