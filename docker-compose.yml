@@ -1,0 +1,44 @@
+services:
+  go2rtc:
+    image: alexxit/go2rtc:latest
+    container_name: cctv-go2rtc
+    restart: always
+    ports:
+      - "1984:1984" # API and Web UI
+      - "8554:8554" # RTSP
+      - "8555:8555/tcp" # WebRTC
+      - "8555:8555/udp" # WebRTC
+    volumes:
+      - ./go2rtc.yaml:/config/go2rtc.yaml
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: cctv-web-dashboard
+    restart: always
+    ports:
+      - "5009:3000"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    depends_on:
+      - go2rtc
+
+  ai:
+    build:
+      context: ./ai
+      dockerfile: Dockerfile
+    container_name: cctv-ai-detector
+    restart: always
+    environment:
+      - RTSP_URL=rtsp://admin:admin2008@192.168.1.2:554/cam/realmonitor?channel=1&subtype=1
+    ports:
+      - "5050:5050"
+    volumes:
+      - ./ai/snapshots:/app/snapshots
+      - ./ai/recordings:/app/recordings
+      - ./ai/data:/app/data
+      - ./ai/server.py:/app/server.py
+      - ./ai/detector.py:/app/detector.py
+
